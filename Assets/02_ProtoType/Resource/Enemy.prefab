@@ -105,3 +105,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyController
   _moveSpeed: 3
+  _separationRadius: 0.2
+  _trackingWeight: 1
+  _separationWeight: 0.5

@@ -30,7 +30,7 @@ namespace Enemy
 
             for ( int i = 0; i < _enemyControllers.Count; i++ )
             {
-                _enemyControllers[i].Tick(tDeltaTime);
+                _enemyControllers[i].Tick(tDeltaTime, _enemyControllers);
             }
         }
     }

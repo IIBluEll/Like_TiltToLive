@@ -13,7 +13,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        ObjectPoolProvider.Instance.CreatePool(_enemyPrefab , 100 , transform);
+        ObjectPoolProvider.Instance.CreatePool(_enemyPrefab , 1000 , transform);
 
         StartSpawn();
     }
