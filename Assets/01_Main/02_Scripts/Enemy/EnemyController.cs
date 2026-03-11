@@ -1,100 +1,94 @@
-﻿using System.Collections.Generic;
+﻿using DG.Tweening;
+using System;
 using UnityEngine;
 
-namespace Enemy
+namespace HM.Enemy.Controller
 {
     public enum ENEMY_STATE
     {
-        IDLE,
+        None,
+        SPAWNING,
         TRACKING,
+        ICED,       // 얼어붙은 상태
+        SCARED,     // 도망가는 상태
+        SHOCKED,    // 감전된 상태
         DEAD
     }
 
+    //TODO - 차후 더 높은 지능의 적 추가 필요 (예 : 아이템을 몸으로 막는다, 플레이어 이동 예측 무빙 )
     public class EnemyController : MonoBehaviour
     {
         [SerializeField] private float _moveSpeed = 3f;
 
-        [Space(5f), Header("Boids Settings")]
-        [SerializeField] private float _separationRadius = 0.05f; // 회피를 시작할 반경
-        [SerializeField] private float _trackingWeight = 1.0f;   // 플레이어 추적 가중치
-        [SerializeField] private float _separationWeight = 0.05f; // 동료 회피 가중치
+        [Header("Animation Setting")]
+        [SerializeField] private float _spawingAnimationSpeed = 1.2f;
+        [SerializeField] private float _flashSpeed = 0.5f;
+        [SerializeField] private SpriteRenderer _innerSprite;
 
-        private ENEMY_STATE _currentState = ENEMY_STATE.IDLE;
-        private Transform _targetTransform;
+        private ENEMY_STATE _currentState = ENEMY_STATE.None;
+        private Transform _playerTransform;
 
-        public void Init(Transform targetTransform)
+        public Action<EnemyController> OnEnemyDead;
+
+        public void InitEnemy(Transform playerTransform)
         {
-            _targetTransform = targetTransform;
+            _playerTransform = playerTransform;
+            _currentState = ENEMY_STATE.SPAWNING;
+
+            transform.DOKill();
+            _innerSprite.DOKill();
+
+            transform.localScale = Vector3.zero;
+
+            Color tStartColor = _innerSprite.color;
+            tStartColor.a = 1f;
+            _innerSprite.color = tStartColor;
+
+            _innerSprite.DOFade(0f , _flashSpeed)
+                .SetLoops(-1 , LoopType.Yoyo)
+                .SetEase(Ease.InOutSine);
+
+            transform.DOScale(Vector3.one , _spawingAnimationSpeed)
+                .SetEase(Ease.OutBack)
+                .OnComplete(OnAnimationFinished);
+        }
+
+        private void OnAnimationFinished()
+        {
+            _innerSprite.DOKill();
+
+            Color tFinalColor = _innerSprite.color;
+            tFinalColor.a = 1f;
+            _innerSprite.color = tFinalColor;
+
             _currentState = ENEMY_STATE.TRACKING;
-
-            EnemyManagerProvider.Instance.RegisterEnemy(this);
         }
 
-        public void Tick(float deltaTime , List<EnemyController> activeEnemies)
+        public void Tick(float deltaTime, float moveSpeed)
         {
-            if ( _currentState == ENEMY_STATE.TRACKING )
+            if(_currentState == ENEMY_STATE.TRACKING)
             {
-                MoveTowardsTarget(deltaTime , activeEnemies);
+                _moveSpeed = moveSpeed;
+                MoveTowardsTarget(deltaTime);
             }
         }
 
-        private void MoveTowardsTarget(float deltaTime , List<EnemyController> activeEnemies)
+        private void MoveTowardsTarget(float deltaTime)
         {
-            if ( _targetTransform == null ) return;
+            if ( _playerTransform == null ) return;
 
-            // 지역 변수 컨벤션
             Vector3 tCurrentPosition = transform.position;
-            Vector3 tTargetPosition = _targetTransform.position;
+            Vector3 tTargetPosition = _playerTransform.position;
+            Vector3 tDirection = (tTargetPosition - tCurrentPosition).normalized;
 
-            // 1. 추적(Tracking) 벡터 계산
-            Vector3 tTrackingDirection = (tTargetPosition - tCurrentPosition).normalized;
-
-            // 2. 분리(Separation) 벡터 계산
-            Vector3 tSeparationVector = Vector3.zero;
-            int tNeighborCount = 0;
-
-            // 최적화: Vector3.Distance 대신 제곱근 연산이 없는 sqrMagnitude를 사용하기 위해 반경도 제곱합니다.
-            float tSqrRadius = _separationRadius * _separationRadius;
-
-            for ( int tIndex = 0; tIndex < activeEnemies.Count; tIndex++ )
-            {
-                EnemyController tOtherEnemy = activeEnemies[tIndex];
-
-                // 자기 자신이거나 비활성화된 개체는 연산에서 제외
-                if ( tOtherEnemy == this || !tOtherEnemy.gameObject.activeSelf ) continue;
-
-                Vector3 tOtherPosition = tOtherEnemy.transform.position;
-                float tSqrDistance = (tCurrentPosition - tOtherPosition).sqrMagnitude;
-
-                // 지정된 반경 내에 다른 적이 있다면 밀어내는 벡터 연산
-                if ( tSqrDistance < tSqrRadius && tSqrDistance > 0.001f )
-                {
-                    Vector3 tPushDirection = tCurrentPosition - tOtherPosition;
-
-                    // 거리가 가까울수록 더 강하게 밀어내기 위해 가중치 적용 (반비례)
-                    tSeparationVector += tPushDirection.normalized / Mathf.Sqrt(tSqrDistance);
-                    tNeighborCount++;
-                }
-            }
-
-            if ( tNeighborCount > 0 )
-            {
-                // 이웃한 적들의 밀어내는 힘의 평균을 구함
-                tSeparationVector /= tNeighborCount;
-            }
-
-            // 3. 최종 이동 방향 = (추적 방향 * 추적 가중치) + (분리 방향 * 회피 가중치)
-            Vector3 tFinalDirection = (tTrackingDirection * _trackingWeight + tSeparationVector * _separationWeight).normalized;
-
-            transform.position += tFinalDirection * ( _moveSpeed * deltaTime );
+            transform.position += tDirection * ( _moveSpeed * deltaTime );
         }
 
-        public void SetDead()
+        public void Dead()
         {
+            transform.DOKill();
             _currentState = ENEMY_STATE.DEAD;
-            gameObject.SetActive(false);
-
-            EnemyManagerProvider.Instance.UnregisterEnemy(this);
+            OnEnemyDead?.Invoke(this);
         }
     }
 }
