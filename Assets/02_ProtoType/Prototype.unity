@@ -351,10 +351,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 785b0033cba3d3246b7ae549dc31699d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HM.Enemy.System.EnemyManagement
-  _enemyPrefab: {fileID: 555435044526576898, guid: a1ff932b4ce40b043adeeee73124548d, type: 3}
+  _enemyPrefab: {fileID: 4223499523542585307, guid: 0e44e71ac1d825d428e54450cdab0671, type: 3}
   _playerTransform: {fileID: 16105016}
-  _spawnInterval: 500
-  _spawnRadius: 15
   _spawnAreaMin: {x: -8, y: -4}
   _spawnAreaMax: {x: 8, y: 4}
 --- !u!114 &675819700
@@ -436,6 +434,88 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 16105013}
   m_SourcePrefab: {fileID: 100100000, guid: 173c96772efde7641afbaa0156984d7b, type: 3}
+--- !u!1 &1135398345
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1135398349}
+  - component: {fileID: 1135398348}
+  - component: {fileID: 1135398347}
+  - component: {fileID: 1135398346}
+  m_Layer: 0
+  m_Name: Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1135398346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135398345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19f9111cd5e0741448e60c13b05dd4a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HM.Manager.GameStateManager
+--- !u!114 &1135398347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135398345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e223bb68f046b74483e4b57d66f6758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HM.Manager.GameDifficultyManager
+  _baseEnemySpeed: 3
+  _maxEnemySpeed: 6
+  _baseSpawnInterval: 2500
+  _minSpawnInterval: 1000
+  _timeToMaxDifficulty: 30
+  _basePatternEnemyCount: 3
+  _maxPatternEnemyCount: 40
+  _BasePatternSpacing: 3
+  _minPatternSpacing: 1
+--- !u!114 &1135398348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135398345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16145552f1fb41c469fa9ed8e1d2f68d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HM.Manager.GameRootManager
+  _gameStateManager: {fileID: 1135398346}
+  _gameDifficultyManager: {fileID: 1135398347}
+  _enemyManagement: {fileID: 675819699}
+--- !u!4 &1135398349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135398345}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1848567512
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,3 +603,4 @@ SceneRoots:
   - {fileID: 675819698}
   - {fileID: 1113682403}
   - {fileID: 1848567515}
+  - {fileID: 1135398349}

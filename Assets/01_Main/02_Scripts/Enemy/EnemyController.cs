@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using UnityEngine;
 
 namespace HM.Enemy.Controller
@@ -17,8 +18,12 @@ namespace HM.Enemy.Controller
     //TODO - 차후 더 높은 지능의 적 추가 필요 (예 : 아이템을 몸으로 막는다, 플레이어 이동 예측 무빙 )
     public class EnemyController : MonoBehaviour
     {
-        //TODO - 시간에 따라 이동 속도 변화 필요
         [SerializeField] private float _moveSpeed = 3f;
+
+        [Header("Animation Setting")]
+        [SerializeField] private float _spawingAnimationSpeed = 1.2f;
+        [SerializeField] private float _flashSpeed = 0.5f;
+        [SerializeField] private SpriteRenderer _innerSprite;
 
         private ENEMY_STATE _currentState = ENEMY_STATE.None;
         private Transform _playerTransform;
@@ -27,14 +32,43 @@ namespace HM.Enemy.Controller
 
         public void InitEnemy(Transform playerTransform)
         {
-            _currentState = ENEMY_STATE.TRACKING;
             _playerTransform = playerTransform;
+            _currentState = ENEMY_STATE.SPAWNING;
+
+            transform.DOKill();
+            _innerSprite.DOKill();
+
+            transform.localScale = Vector3.zero;
+
+            Color tStartColor = _innerSprite.color;
+            tStartColor.a = 1f;
+            _innerSprite.color = tStartColor;
+
+            _innerSprite.DOFade(0f , _flashSpeed)
+                .SetLoops(-1 , LoopType.Yoyo)
+                .SetEase(Ease.InOutSine);
+
+            transform.DOScale(Vector3.one , _spawingAnimationSpeed)
+                .SetEase(Ease.OutBack)
+                .OnComplete(OnAnimationFinished);
         }
 
-        public void Tick(float deltaTime)
+        private void OnAnimationFinished()
+        {
+            _innerSprite.DOKill();
+
+            Color tFinalColor = _innerSprite.color;
+            tFinalColor.a = 1f;
+            _innerSprite.color = tFinalColor;
+
+            _currentState = ENEMY_STATE.TRACKING;
+        }
+
+        public void Tick(float deltaTime, float moveSpeed)
         {
             if(_currentState == ENEMY_STATE.TRACKING)
             {
+                _moveSpeed = moveSpeed;
                 MoveTowardsTarget(deltaTime);
             }
         }
@@ -52,8 +86,8 @@ namespace HM.Enemy.Controller
 
         public void Dead()
         {
+            transform.DOKill();
             _currentState = ENEMY_STATE.DEAD;
-
             OnEnemyDead?.Invoke(this);
         }
     }

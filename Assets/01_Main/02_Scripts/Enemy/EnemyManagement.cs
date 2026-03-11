@@ -1,5 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using HM.Enemy.Controller;
+using HM.Enemy.Pattern;
+using HM.Manager;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,10 +12,6 @@ namespace HM.Enemy.System
         [SerializeField] private GameObject _enemyPrefab;
         [SerializeField] private Transform _playerTransform;
 
-        // TODO 차후 최상단 매니저가 시간을 재서 그에 맞춰 스폰 주기 변경
-        [SerializeField] private int _spawnInterval = 500;
-        [SerializeField] private float _spawnRadius = 15f;
-
         [Header("Spawn Area")]
         [SerializeField] private Vector2 _spawnAreaMin;
         [SerializeField] private Vector2 _spawnAreaMax;
@@ -22,19 +20,34 @@ namespace HM.Enemy.System
 
         private readonly List<EnemyController> _activeEnemies = new();
 
-        private void Start()
+        private GameDifficultyManager _gameDifficultyManager;
+        private GameStateManager _gameStateManager;
+        private EnemyPatternPool _enemyPatternPool;
+
+        public void Init(GameDifficultyManager gameDifficultyManager, GameStateManager gameStateManager)
         {
+            _gameDifficultyManager = gameDifficultyManager;
+            _gameStateManager = gameStateManager;
+
+            _enemyPatternPool = new EnemyPatternPool(_spawnAreaMin, _spawnAreaMax);
+
             EnemyObjectPoolProvider.Instance.CreatePool(_enemyPrefab , 1000 , transform);
             StartSpawn();
         }
-
+        
         private void Update()
         {
+            if(_gameStateManager == null || _gameStateManager.CurrentState != GAME_STATE.PLAYING)
+            {
+                return;
+            }
+
             float tDeltaTime = Time.deltaTime;
+            float tCurrentSpeed = _gameDifficultyManager.CurrentEnemySpeed;
 
             for ( int i = 0; i < _activeEnemies.Count; i++ )
             {
-                _activeEnemies[ i ].Tick(tDeltaTime);
+                _activeEnemies[ i ].Tick(tDeltaTime, tCurrentSpeed);
             }
         }
 
@@ -59,38 +72,45 @@ namespace HM.Enemy.System
         {
             while(_isSpawning)
             {
-                SpawnSingleEnemy();
-                await UniTask.Delay(_spawnInterval);
+                if(_gameStateManager.CurrentState == GAME_STATE.PLAYING)
+                {
+                    SpawnPatternEnemy();
+                }
+
+                int tSpawnInterval = _gameDifficultyManager.CurrentSpawnInterval;
+                await UniTask.Delay(tSpawnInterval);
             }
         }
 
-        private void SpawnSingleEnemy()
+        private void SpawnPatternEnemy()
         {
-            GameObject tEnemyObject = EnemyObjectPoolProvider.Instance.GetObject(_enemyPrefab);
+            float tProgress = _gameDifficultyManager.CurrentProgress;
+            int tEnemyCount = _gameDifficultyManager.CurrentPatternEnemyCount;
+            float tSpacing = _gameDifficultyManager.CurrentPatternSpacing;
 
-            EnemyController tEnemyController = tEnemyObject.GetComponent<EnemyController>();
+            IEnemyPattern tPattern = _enemyPatternPool.GetPattern(tProgress);
+            Vector3 tCenterPos = _playerTransform != null ? _playerTransform.position : Vector3.zero;
 
-            if(tEnemyController != null)
+            Vector3[] tPos = tPattern.GetPatternPos(tEnemyCount, tSpacing, tCenterPos); 
+
+            for(int i = 0; i < tPos.Length; i++ )
             {
-                Vector3 tSpawnPos = GetRandomSpawnPos();
-                tEnemyObject.transform.position = tSpawnPos;
+                GameObject tEnemyObj = EnemyObjectPoolProvider.Instance.GetObject(_enemyPrefab);
+                EnemyController tEnemyController = tEnemyObj.GetComponent<EnemyController>();
 
-                tEnemyController.InitEnemy(_playerTransform);
-                RegisterEnemy(tEnemyController);
-                tEnemyController.OnEnemyDead += UnregisterEnemy;
+                if(tEnemyController != null)
+                {
+                    tEnemyObj.transform.position = tPos[i];
+
+                    tEnemyController.InitEnemy(_playerTransform);
+                    RegisterEnemy(tEnemyController);
+
+                    tEnemyController.OnEnemyDead -= UnregisterEnemy;
+                    tEnemyController.OnEnemyDead += UnregisterEnemy;
+                }
             }
         }
 
-        private Vector3 GetRandomSpawnPos()
-        {
-            Vector3 tPos = Vector3.zero;
-
-            float tRandomX = Random.Range(_spawnAreaMin.x, _spawnAreaMax.x);
-            float tRandomY = Random.Range(_spawnAreaMin.y, _spawnAreaMax.y);
-            tPos = new Vector3(tRandomX , tRandomY , 0f);
-
-            return tPos;
-        }
         #endregion
 
         #region 적 관리 로직

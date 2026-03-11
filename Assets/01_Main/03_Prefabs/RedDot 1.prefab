@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 1}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7594523700100723318}
@@ -100,9 +100,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7594523700100723318}
-  - component: {fileID: -5388240786758664063}
+  - component: {fileID: 506431092596658046}
   m_Layer: 0
-  m_Name: RedDot
+  m_Name: RedDot 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,14 +118,14 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1050591250594884299}
   - {fileID: 1553089784087738898}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-5388240786758664063
+--- !u!114 &506431092596658046
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,13 +134,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4223499523542585307}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f1d667b87fcc294a9125954bfa4c713, type: 3}
+  m_Script: {fileID: 11500000, guid: 46db4e603812c1244be594de5c7c6d1a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyController
+  m_EditorClassIdentifier: Assembly-CSharp::HM.Enemy.Controller.EnemyController
   _moveSpeed: 3
-  _separationRadius: 0.3
-  _trackingWeight: 1
-  _separationWeight: 0.5
+  _spawingAnimationSpeed: 1.2
+  _flashSpeed: 0.3
+  _innerSprite: {fileID: 4950198647325758545}
 --- !u!1 &7554940967669015594
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +168,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.18, y: 0.18, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7594523700100723318}
