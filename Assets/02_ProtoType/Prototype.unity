@@ -169,6 +169,42 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3262992183733034603, guid: 173c96772efde7641afbaa0156984d7b, type: 3}
   m_PrefabInstance: {fileID: 1113682403}
   m_PrefabAsset: {fileID: 0}
+--- !u!58 &16105017
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16105012}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 1.8
 --- !u!1 &262250155
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,6 +459,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7495081805032191899, guid: 173c96772efde7641afbaa0156984d7b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -433,6 +473,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7495081805032191899, guid: 173c96772efde7641afbaa0156984d7b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 16105013}
+    - targetCorrespondingSourceObject: {fileID: 7495081805032191899, guid: 173c96772efde7641afbaa0156984d7b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 16105017}
   m_SourcePrefab: {fileID: 100100000, guid: 173c96772efde7641afbaa0156984d7b, type: 3}
 --- !u!1 &1135398345
 GameObject:
@@ -446,6 +489,7 @@ GameObject:
   - component: {fileID: 1135398348}
   - component: {fileID: 1135398347}
   - component: {fileID: 1135398346}
+  - component: {fileID: 1135398350}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -501,6 +545,7 @@ MonoBehaviour:
   _gameStateManager: {fileID: 1135398346}
   _gameDifficultyManager: {fileID: 1135398347}
   _enemyManagement: {fileID: 675819699}
+  _playerController: {fileID: 16105013}
 --- !u!4 &1135398349
 Transform:
   m_ObjectHideFlags: 0
@@ -516,6 +561,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1135398350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135398345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74dfa0d9171f7614daba14ff934dc810, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HM.Item.ItemManagement
+  _itemPrefab: {fileID: 4004943990323045130, guid: 2409ebbd034fbb641922027a976292a3, type: 3}
+  _spawnInterval: 1000
+  _spawnAreaMin: {x: -8, y: -4}
+  _spawnAreaMax: {x: 8, y: 4}
 --- !u!1 &1848567512
 GameObject:
   m_ObjectHideFlags: 0

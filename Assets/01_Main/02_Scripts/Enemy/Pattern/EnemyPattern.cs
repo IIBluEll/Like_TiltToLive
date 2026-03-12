@@ -20,15 +20,15 @@ namespace HM.Enemy.Pattern
 
         public Vector3[] GetPatternPos(int enemyCount, float spacing, Vector3 spacingPos)
         {
-            Vector3[] patternPositions = new Vector3[enemyCount];
+            Vector3[] tPatternPositions = new Vector3[enemyCount];
 
             for (int i = 0; i < enemyCount; i++)
             {
-                float randomX = Random.Range(_spawnAreaMin.x, _spawnAreaMax.x);
-                float randomY = Random.Range(_spawnAreaMin.y, _spawnAreaMax.y);
-                patternPositions[i] = new Vector3(randomX, randomY, 0f);
+                float tRandomX = Random.Range(_spawnAreaMin.x, _spawnAreaMax.x);
+                float tRandomY = Random.Range(_spawnAreaMin.y, _spawnAreaMax.y);
+                tPatternPositions[i] = new Vector3(tRandomX, tRandomY, 0f);
             }
-            return patternPositions;
+            return tPatternPositions;
         }
     }
 

@@ -90,6 +90,19 @@ namespace HM.Enemy.Controller
             _currentState = ENEMY_STATE.DEAD;
             OnEnemyDead?.Invoke(this);
         }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if(_currentState == ENEMY_STATE.DEAD || _currentState == ENEMY_STATE.SPAWNING)
+            {
+                return;
+            }
+
+            if(collision.CompareTag("Weapon"))
+            {
+                Dead();
+            }
+        }
     }
 }
 

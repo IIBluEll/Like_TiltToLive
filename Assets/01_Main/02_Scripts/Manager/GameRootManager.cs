@@ -1,4 +1,6 @@
 ﻿using HM.Enemy.System;
+using HM.Item;
+using Player;
 using UnityEngine;
 
 namespace HM.Manager
@@ -11,6 +13,7 @@ namespace HM.Manager
 
         [Space(5f), Header("Logic")]
         [SerializeField] private EnemyManagement _enemyManagement;
+        [SerializeField] private PlayerController _playerController;
 
         private void Start()
         {
@@ -19,7 +22,19 @@ namespace HM.Manager
 
             _enemyManagement.Init(_gameDifficultyManager, _gameStateManager);
 
+            if(_playerController != null)
+            {
+                _playerController.OnplayerDead -= OnPlayerDeadAction;
+                _playerController.OnplayerDead += OnPlayerDeadAction;
+            }
+
             _gameStateManager.StartGame();
+        }
+
+        private void OnPlayerDeadAction()
+        {
+            _gameStateManager.GameOver();
+            _enemyManagement.StopSpawn();
         }
     }
 }

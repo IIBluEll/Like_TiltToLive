@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Player
 {
-    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Rigidbody2D), typeof(CircleCollider2D))]
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private float _moveSpeed = 10f;
@@ -11,6 +12,9 @@ namespace Player
         private Camera _mainCam;
         private Vector2 _targetPos;
 
+        public Action OnplayerDead;
+        private bool _isDead = false;
+
         private void Awake()
         {
             _rigid = GetComponent<Rigidbody2D>();
@@ -18,16 +22,26 @@ namespace Player
 
             _rigid.gravityScale = 0f;
             _rigid.freezeRotation = true;
+
+            _rigid.bodyType = RigidbodyType2D.Kinematic;
         }
 
         private void Update()
         {
+            if ( _isDead )
+            {
+                return;
+            }
             Vector3 tMousePos = Input.mousePosition;
             _targetPos = _mainCam.ScreenToWorldPoint(tMousePos);
         }
 
         private void FixedUpdate()
         {
+            if ( _isDead )
+            {
+                return;
+            }
             MoveToTarget();
         }
 
@@ -38,6 +52,20 @@ namespace Player
             Vector2 tNextPos = Vector2.Lerp(tCurrentPos, _targetPos, _moveSpeed * Time.fixedDeltaTime);
 
             _rigid.MovePosition(tNextPos);
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if(_isDead)
+            {
+                return;
+            }
+
+            if(collision.CompareTag("Enemy"))
+            {
+                _isDead = true;
+                OnplayerDead?.Invoke();
+            }
         }
     }
 }
