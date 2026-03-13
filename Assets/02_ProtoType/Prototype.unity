@@ -546,6 +546,7 @@ MonoBehaviour:
   _gameDifficultyManager: {fileID: 1135398347}
   _enemyManagement: {fileID: 675819699}
   _playerController: {fileID: 16105013}
+  _itemManagement: {fileID: 1135398350}
 --- !u!4 &1135398349
 Transform:
   m_ObjectHideFlags: 0

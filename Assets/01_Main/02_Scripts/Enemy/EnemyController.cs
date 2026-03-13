@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System;
 using UnityEngine;
 
@@ -25,6 +26,9 @@ namespace HM.Enemy.Controller
         [SerializeField] private float _flashSpeed = 0.5f;
         [SerializeField] private SpriteRenderer _innerSprite;
 
+        [Space(5),Header("상태 표현")]
+        [SerializeField] private GameObject _iceOverlay;
+
         private ENEMY_STATE _currentState = ENEMY_STATE.None;
         private Transform _playerTransform;
 
@@ -37,6 +41,11 @@ namespace HM.Enemy.Controller
 
             transform.DOKill();
             _innerSprite.DOKill();
+
+            if(_iceOverlay != null)
+            {
+                _iceOverlay.SetActive(false);
+            }
 
             transform.localScale = Vector3.zero;
 
@@ -84,16 +93,43 @@ namespace HM.Enemy.Controller
             transform.position += tDirection * ( _moveSpeed * deltaTime );
         }
 
+        public async UniTaskVoid ApplyIceEffect_async(float duration)
+        {
+            if ( _currentState == ENEMY_STATE.DEAD || _currentState == ENEMY_STATE.SPAWNING || _iceOverlay == null )
+            {
+                return;
+            }
+
+            _currentState = ENEMY_STATE.ICED;
+
+            _iceOverlay.SetActive(true);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+
+            if ( _currentState == ENEMY_STATE.ICED )
+            {
+                _currentState = ENEMY_STATE.TRACKING;
+
+                _iceOverlay.SetActive(false);
+            }
+        }
+
         public void Dead()
         {
             transform.DOKill();
             _currentState = ENEMY_STATE.DEAD;
+
+            if ( _iceOverlay != null )
+            {
+                _iceOverlay.SetActive(false);
+            }
+
             OnEnemyDead?.Invoke(this);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if(_currentState == ENEMY_STATE.DEAD || _currentState == ENEMY_STATE.SPAWNING)
+            if ( _currentState == ENEMY_STATE.DEAD || _currentState == ENEMY_STATE.SPAWNING)
             {
                 return;
             }

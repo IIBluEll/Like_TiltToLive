@@ -14,6 +14,7 @@ namespace HM.Manager
         [Space(5f), Header("Logic")]
         [SerializeField] private EnemyManagement _enemyManagement;
         [SerializeField] private PlayerController _playerController;
+        [SerializeField] private ItemManagement _itemManagement;
 
         private void Start()
         {
@@ -21,6 +22,7 @@ namespace HM.Manager
             _gameDifficultyManager.Init(_gameStateManager);
 
             _enemyManagement.Init(_gameDifficultyManager, _gameStateManager);
+            _itemManagement.Init(_gameStateManager);
 
             if(_playerController != null)
             {
@@ -35,6 +37,7 @@ namespace HM.Manager
         {
             _gameStateManager.GameOver();
             _enemyManagement.StopSpawn();
+            _itemManagement.StopSpawn();
         }
     }
 }

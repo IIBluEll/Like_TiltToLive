@@ -40,21 +40,25 @@ namespace HM.Item
 
         private async UniTaskVoid SpawnRoutine_async()
         {
+            await UniTask.Delay(1000);
+
             while ( _isSpawning )
             {
-                await UniTask.Delay(_spawnInterval);
-
                 // 게임이 플레이 중일 때만 스폰 타이머가 유효하도록 통제
                 if ( _gameStateManager != null && _gameStateManager.CurrentState == GAME_STATE.PLAYING )
                 {
                     SpawnItem();
                 }
+
+                await UniTask.Delay(_spawnInterval);
             }
         }
 
         private void SpawnItem()
         {
             Vector3 tSpawnPos = GetRandomSpawnPos();
+
+            Debug.Log($"[ItemManagement] 아이템 스폰 시도! 위치: {tSpawnPos}");
 
             // 아이템은 적처럼 개수가 많지 않으므로 Instantiate 사용이 타당합니다.
             GameObject tItemObj = Instantiate(_itemPrefab, tSpawnPos, Quaternion.identity, transform);
@@ -67,6 +71,11 @@ namespace HM.Item
                 tItemController.OnItemCollected += OnItemCollectedActioned;
 
                 _activeItem.Add(tItemController);
+            }
+            else
+            {
+                // 3. 프리팹 세팅 누락 확인
+                Debug.LogError("[ItemManagement] 프리팹에 ItemController 스크립트가 없습니다!");
             }
         }
 

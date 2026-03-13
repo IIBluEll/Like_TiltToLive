@@ -7,8 +7,7 @@ namespace HM.Item.Weapon
     public class ExplosionController : MonoBehaviour
     {
         [Header("폭발 세팅")]
-        [SerializeField] private float _maxRadius = 5f;
-        [SerializeField] private float _expandTime = 0.2f;
+        [SerializeField] private float _expandTime = 0.5f;
         [SerializeField] private float _untilTime  = 1.5f;
 
         private void Awake()
