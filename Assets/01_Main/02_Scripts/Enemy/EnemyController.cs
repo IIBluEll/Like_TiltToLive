@@ -32,11 +32,14 @@ namespace HM.Enemy.Controller
         private ENEMY_STATE _currentState = ENEMY_STATE.None;
         private Transform _playerTransform;
 
+        private IEnemyMovement _movementPattern;
+
         public Action<EnemyController> OnEnemyDead;
 
-        public void InitEnemy(Transform playerTransform)
+        public void InitEnemy(Transform playerTransform, IEnemyMovement movementPattern)
         {
             _playerTransform = playerTransform;
+            _movementPattern = movementPattern;
             _currentState = ENEMY_STATE.SPAWNING;
 
             transform.DOKill();
@@ -78,7 +81,13 @@ namespace HM.Enemy.Controller
             if(_currentState == ENEMY_STATE.TRACKING)
             {
                 _moveSpeed = moveSpeed;
-                MoveTowardsTarget(deltaTime);
+
+                if ( _movementPattern != null )
+                {
+                    _movementPattern.Move(transform,_playerTransform, _moveSpeed, deltaTime);
+                }
+
+                //MoveTowardsTarget(deltaTime);
             }
         }
 

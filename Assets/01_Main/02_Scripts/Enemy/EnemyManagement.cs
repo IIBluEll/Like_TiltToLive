@@ -29,7 +29,7 @@ namespace HM.Enemy.System
             _gameDifficultyManager = gameDifficultyManager;
             _gameStateManager = gameStateManager;
 
-            _enemyPatternPool = new EnemyPatternPool(_spawnAreaMin, _spawnAreaMax);
+            _enemyPatternPool = new EnemyPatternPool();
 
             EnemyObjectPoolProvider.Instance.CreatePool(_enemyPrefab , 1000 , transform);
             StartSpawn();
@@ -59,7 +59,7 @@ namespace HM.Enemy.System
             {
                 _isSpawning = true;
 
-                SpawnRoutine_Async().Forget();
+                SpawnRoutine_async().Forget();
             }
         }
 
@@ -68,7 +68,7 @@ namespace HM.Enemy.System
             _isSpawning = false;
         }
 
-        private async UniTaskVoid SpawnRoutine_Async()
+        private async UniTaskVoid SpawnRoutine_async()
         {
             while(_isSpawning)
             {
@@ -88,21 +88,22 @@ namespace HM.Enemy.System
             int tEnemyCount = _gameDifficultyManager.CurrentPatternEnemyCount;
             float tSpacing = _gameDifficultyManager.CurrentPatternSpacing;
 
-            IEnemyPattern tPattern = _enemyPatternPool.GetPattern(tProgress);
             Vector3 tCenterPos = _playerTransform != null ? _playerTransform.position : Vector3.zero;
 
-            Vector3[] tPos = tPattern.GetPatternPos(tEnemyCount, tSpacing, tCenterPos); 
+            // Pool에서 위치 배열과 이동 전략이 담긴 구조체를 반환받음
+            PatternData tPatternData = _enemyPatternPool.GetPattern(tProgress, tEnemyCount, tSpacing, tCenterPos);
 
-            for(int i = 0; i < tPos.Length; i++ )
+            for ( int i = 0; i < tPatternData.SpawnPos.Length; i++ )
             {
                 GameObject tEnemyObj = EnemyObjectPoolProvider.Instance.GetObject(_enemyPrefab);
                 EnemyController tEnemyController = tEnemyObj.GetComponent<EnemyController>();
 
-                if(tEnemyController != null)
+                if ( tEnemyController != null )
                 {
-                    tEnemyObj.transform.position = tPos[i];
+                    tEnemyObj.transform.position = tPatternData.SpawnPos[ i ];
 
-                    tEnemyController.InitEnemy(_playerTransform);
+                    // 컨트롤러 초기화 시 이동 전략 함께 주입
+                    tEnemyController.InitEnemy(_playerTransform , tPatternData.MovementPattern);
                     RegisterEnemy(tEnemyController);
 
                     tEnemyController.OnEnemyDead -= UnregisterEnemy;

@@ -63,8 +63,8 @@ namespace Player
 
             if(collision.CompareTag("Enemy"))
             {
-                _isDead = true;
-                OnplayerDead?.Invoke();
+                //_isDead = true;
+                //OnplayerDead?.Invoke();
             }
         }
     }
