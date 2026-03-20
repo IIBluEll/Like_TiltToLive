@@ -58,8 +58,6 @@ namespace HM.Item
         {
             Vector3 tSpawnPos = GetRandomSpawnPos();
 
-            Debug.Log($"[ItemManagement] 아이템 스폰 시도! 위치: {tSpawnPos}");
-
             // 아이템은 적처럼 개수가 많지 않으므로 Instantiate 사용이 타당합니다.
             GameObject tItemObj = Instantiate(_itemPrefab, tSpawnPos, Quaternion.identity, transform);
 

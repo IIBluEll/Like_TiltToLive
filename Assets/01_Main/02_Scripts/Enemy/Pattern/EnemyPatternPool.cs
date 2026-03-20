@@ -9,8 +9,10 @@ namespace HM.Enemy.Pattern
 
         public EnemyPatternPool()
         {
-            _weightedPatterns.Add((new CircleSwarmPattern(), 10f));
-            _weightedPatterns.Add((new HorizontalWallPattern(), 10f));
+            _weightedPatterns.Add((new CircleSwarmPattern(), 1f));
+            _weightedPatterns.Add((new HorizontalWallPattern(), 1f));
+            _weightedPatterns.Add((new WobbleWallPattern(), 1f));    
+            _weightedPatterns.Add((new CrossDashPattern(), 1f));
         }
 
         public PatternData GetPattern(float progress , int enemyCount , float spacing , Vector3 centerPos)
@@ -26,6 +28,7 @@ namespace HM.Enemy.Pattern
 
             IEnemyPattern tSelectedPattern = _weightedPatterns[0].pattern;
 
+
             foreach ( var tItem in _weightedPatterns )
             {
                 tCumulativeWeight += tItem.weight;
@@ -35,6 +38,8 @@ namespace HM.Enemy.Pattern
                     break;
                 }
             }
+
+            Debug.Log($"선택된 패턴 : {tSelectedPattern.GetType().Name}");
 
             return tSelectedPattern.GetPatternPos(enemyCount , spacing , centerPos);
         }
