@@ -1,48 +1,47 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace HM.Enemy.Pattern
 {
     public class EnemyPatternPool
     {
-        private IEnemyPattern _randomPattern;
-        private IEnemyPattern _circlePattern;
+        private readonly List<(IEnemyPattern pattern, float weight)> _weightedPatterns = new();
 
-        public EnemyPatternPool(Vector2 spawnAreaMin, Vector2 spawnAreaMax)
+        public EnemyPatternPool()
         {
-            _randomPattern = new RandomPattern(spawnAreaMin,spawnAreaMax);
-            _circlePattern = new CirclePattern();
+            _weightedPatterns.Add((new CircleSwarmPattern(), 1f));
+            _weightedPatterns.Add((new HorizontalWallPattern(), 1f));
+            _weightedPatterns.Add((new WobbleWallPattern(), 1f));    
+            _weightedPatterns.Add((new CrossDashPattern(), 1f));
         }
 
-        public IEnemyPattern GetPattern(float progress)
+        public PatternData GetPattern(float progress , int enemyCount , float spacing , Vector3 centerPos)
         {
-            if ( progress < 0.1f )
+            float tTotalWeight = 0f;
+            foreach ( var tItem in _weightedPatterns )
             {
-                return _randomPattern;
+                tTotalWeight += tItem.weight;
             }
-            else if ( progress < 0.6f )
+
+            float tRandomValue = Random.Range(0, tTotalWeight);
+            float tCumulativeWeight = 0f;
+
+            IEnemyPattern tSelectedPattern = _weightedPatterns[0].pattern;
+
+
+            foreach ( var tItem in _weightedPatterns )
             {
-                int tRandom = Random.Range(0, 100);
-                if ( tRandom < 50 )
+                tCumulativeWeight += tItem.weight;
+                if ( tRandomValue <= tCumulativeWeight )
                 {
-                    return _randomPattern;
-                }
-                else
-                {
-                    return _circlePattern;
-                }
-            }
-            else
-            {
-                int tRandom = Random.Range(0, 100);
-                if(tRandom < 30)
-                {
-                    return _randomPattern;
-                }
-                else
-                {
-                    return _circlePattern;
+                    tSelectedPattern = tItem.pattern;
+                    break;
                 }
             }
+
+            Debug.Log($"선택된 패턴 : {tSelectedPattern.GetType().Name}");
+
+            return tSelectedPattern.GetPatternPos(enemyCount , spacing , centerPos);
         }
     }
 }
