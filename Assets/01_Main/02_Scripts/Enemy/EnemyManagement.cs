@@ -24,14 +24,15 @@ namespace HM.Enemy.System
         private GameStateManager _gameStateManager;
         private EnemyPatternPool _enemyPatternPool;
 
-        public void Init(GameDifficultyManager gameDifficultyManager, GameStateManager gameStateManager)
+        public async UniTask Init(GameDifficultyManager gameDifficultyManager, GameStateManager gameStateManager)
         {
             _gameDifficultyManager = gameDifficultyManager;
             _gameStateManager = gameStateManager;
 
             _enemyPatternPool = new EnemyPatternPool();
 
-            EnemyObjectPoolProvider.Instance.CreatePool(_enemyPrefab , 1000 , transform);
+            await EnemyObjectPoolProvider.Instance.CreatePool_async(_enemyPrefab , 2000 , transform);
+            //EnemyObjectPoolProvider.Instance.CreatePool(_enemyPrefab , 1000 , transform);
             StartSpawn();
         }
         
