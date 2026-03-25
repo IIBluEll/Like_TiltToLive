@@ -16,10 +16,11 @@ public class PlanetMove : MonoBehaviour
         Animator tAnim = GetComponent<Animator>();
         SpriteRenderer tSprite = GetComponent<SpriteRenderer>();
 
-        float tRandomNum = UnityEngine.Random.Range(1f,3f);
+        float tRandomNum = UnityEngine.Random.Range(0.5f,2f);
 
         transform.localScale = Vector3.one * tRandomNum;
-        tAnim.speed = 1f - (0.15f * tRandomNum);
+
+        tAnim.speed = Mathf.Lerp(0.6f , 0.1f , ( tRandomNum - 1f ) / 2f);
 
         var tColor = tSprite.color;
         tColor.a = Mathf.Lerp(0.3f, 0.7f, (tRandomNum - 1f) / 2f);
