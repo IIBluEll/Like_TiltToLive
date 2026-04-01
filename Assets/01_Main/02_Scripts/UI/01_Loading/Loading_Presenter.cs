@@ -42,7 +42,7 @@ namespace HM.UI.Loading
             if(progress >= 1f)
             {
                 Debug.Log("로딩 끝");
-                // 다음 화면
+                _presenterProvider.ChangeState(UI_STATE.MAINMENU);
             }
         }
 
