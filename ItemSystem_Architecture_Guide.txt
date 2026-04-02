@@ -1,0 +1,59 @@
+[Tilt To Live 모작] 아이템 및 무기 시스템 아키텍처 가이드
+
+1. 아키텍처 개요 및 변경 사유 (Why we changed)
+과거 방식은 ScriptableObject(SO) 내부에서 직접 프리팹을 Instantiate(생성) 하고 무기가 끝날 때 Destroy(파괴) 하는 구조였습니다. 
+이 방식은 가비지 컬렉터(GC) 스파이크를 유발하여 화면에 수백 개의 적이 나오는 탄막/회피 게임에서 치명적인 프레임 드랍(버벅임)을 만듭니다. 
+또한 SO는 순수 '데이터'만 보관해야 하는데 무기 실행 로직이 섞여 있어 구조적 단일 책임 원칙(SRP)에 위배되었습니다.
+
+새로운 아키텍처의 핵심 목표:
+- Zero Allocation (GC 0%): 게임 플레이 도중에는 어떠한 파괴(Destroy)나 생성(Instantiate)도 일어나지 않습니다. 모든 무기와 맵 아이템은 ObjectPool을 통해 재사용됩니다.
+- 전략 패턴 (Strategy Pattern) 기반 무기 확장: 무기가 추가될 때마다 기존 코드를 수정할 필요 없이, IWeapon 인터페이스를 상속받는 새로운 스크립트만 추가하면 됩니다.
+
+---
+
+2. 핵심 구성 요소 (Core Components)
+
+① IWeapon.cs (무기 규격 및 타입)
+- 역할: 모든 무기가 반드시 지켜야 하는 '계약서(Interface)'입니다.
+- 내용: WEAPON_TYPE (무기의 종류) 열거형과 Execute() 함수가 정의되어 있습니다. 
+- 설계 의도: Manager는 특정 무기(Explosion, Shield 등)의 구체적인 클래스를 알 필요 없이, 오직 IWeapon 인터페이스만 바라보고 Execute()를 실행하면 됩니다. (의존성 역전)
+
+② WeaponItemDataSO.cs (순수 데이터)
+- 역할: 인벤토리 아이콘, 무기 이름, 그리고 이 아이템을 먹었을 때 발동할 무기 타입(WEAPON_TYPE)만 보관합니다.
+- 설계 의도: 이전과 달리 이곳에는 어떠한 로직(함수)도 들어가지 않습니다. 철저하게 껍데기 역할만 수행합니다.
+
+③ FieldItem.cs (맵에 굴러다니는 아이템)
+- 역할: ItemSpawnManager에 의해 맵에 뿌려지는 오브젝트입니다.
+- 동작: 플레이어(Player 태그)와 충돌하면, 자신이 가지고 있는 SO 데이터의 WeaponType을 읽어내어 WeaponManagerProvider에게 "이 무기를 실행해줘!" 라고 요청한 뒤 자신은 풀(Pool)로 돌아가 숨습니다.
+
+④ WeaponManagerProvider.cs (통합 무기 풀링 매니저)
+- 역할: 게임 내에 존재하는 모든 무기 프리팹을 ObjectPool로 관리하는 최고 관리자(싱글톤)입니다.
+- 동작: FieldItem이 무기 실행을 요청(ExecuteWeapon)하면, 자신이 관리하는 풀 창고에서 해당 무기를 꺼내서 IWeapon.Execute()를 호출합니다. 무기가 끝나면 다시 창고로 회수합니다.
+
+⑤ ItemSpawnManager.cs (아이템 스포너)
+- 역할: 일정 시간(_spawnInterval)마다 랜덤한 위치에 FieldItem을 생성(정확히는 풀에서 꺼내옴)합니다.
+- 동작: UniTask와 CancellationToken을 조합하여 메모리 누수 없이 안전하게 백그라운드에서 아이템을 맵에 지속적으로 공급합니다.
+
+⑥ ExplosionWeapon.cs (실제 무기 구현체 예시 - 폭발)
+- 역할: IWeapon을 상속받아 구현된 실제 폭발 무기입니다.
+- 동작: 매니저가 Execute를 부르면, DOTween을 이용해 스케일을 키워 폭발 연출을 하고 적과 충돌 처리(OnTriggerEnter2D)를 합니다. 폭발이 끝나면 이벤트(OnWeaponFinished)를 호출하여 매니저가 자신을 다시 풀로 집어넣게 만듭니다.
+
+---
+
+3. 무기 발동 흐름도 (Flow)
+
+1) ItemSpawnManager가 랜덤한 위치에 FieldItem(구슬)을 풀에서 꺼내어 배치합니다.
+2) 플레이어가 이동하다가 FieldItem과 충돌(OnTriggerEnter2D)합니다.
+3) FieldItem은 자신의 타입(예: EXPLOSION)을 WeaponManagerProvider.Instance.ExecuteWeapon(...) 함수로 넘기며 발동을 요청하고, 자신은 화면에서 사라집니다.
+4) WeaponManagerProvider는 폭발 무기 풀에서 쿨쿨 자고 있던 ExplosionWeapon 프리팹을 하나 꺼냅니다.
+5) ExplosionWeapon.Execute(...)가 호출되며 무기가 화면에 등장해 쾅! 터집니다.
+6) 폭발 이펙트가 끝나면 ExplosionWeapon은 OnWeaponFinished 이벤트를 쏴서 매니저에게 끝났음을 알립니다.
+7) 매니저는 그 이펙트를 다시 비활성화(SetActive(false))하여 풀 창고에 넣어둡니다.
+
+---
+
+4. 학습 포인트 (내일 집중해서 볼 부분)
+
+- 오브젝트 풀링(Object Pooling): WeaponManagerProvider.cs 안에 있는 UnityEngine.Pool.ObjectPool의 문법(createFunc, actionOnGet, actionOnRelease)을 주의 깊게 보세요.
+- 인터페이스(Interface)를 활용한 느슨한 결합: 매니저는 폭발인지 레이저인지 알 필요 없이 IWeapon만 보고 실행합니다. 다형성의 강력한 예시입니다.
+- Action 기반 콜백(Callback): 무기(ExplosionWeapon)가 끝났을 때 스스로 Destroy하지 않고, 매니저에게 '끝났다'고 신호를 보내 매니저가 회수하게 만드는 구조를 눈여겨보세요.

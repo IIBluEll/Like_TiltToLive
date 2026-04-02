@@ -75,7 +75,7 @@ namespace HM.UI.InGame
 
         private void OnGameStartActioned()
         {
-            // 게임 로직 시작
+            _rootManager.StartGame();
         }
     }
 }

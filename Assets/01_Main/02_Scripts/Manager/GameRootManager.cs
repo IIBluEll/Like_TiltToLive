@@ -20,7 +20,7 @@ namespace HM.Manager
         [Space(5f), Header("Logic")]
         [SerializeField] private EnemyManagement _enemyManagement;
         [SerializeField] private PlayerController _playerController;
-        [SerializeField] private ItemManagement _itemManagement;
+        //[SerializeField] private ItemManagement _itemManagement;
 
         public Action<float> OnLoadingProgressChanged;
 
@@ -43,6 +43,7 @@ namespace HM.Manager
 
             if ( _playerController != null )
             {
+                _playerController.Init(_gameStateManager);
                 _playerController.OnPlayerDead -= OnPlayerDeadAction;
                 _playerController.OnPlayerDead += OnPlayerDeadAction;
             }
@@ -59,7 +60,7 @@ namespace HM.Manager
             // [로딩 80%] 아이템 시스템 등 기타 초기화
             Debug.Log("[로딩 80%] 아이템 시스템 등 기타 초기화");
             OnLoadingProgressChanged?.Invoke(0.8f);
-            _itemManagement.Init(_gameStateManager);
+            //_itemManagement.Init(_gameStateManager);
 
             await UniTask.Delay(100);
             
@@ -69,15 +70,18 @@ namespace HM.Manager
 
             // 시각적인 로딩 완료를 보여주기 위해 약간의 인위적 대기가 필요할 수 있습니다.
             await UniTask.Delay(500);
-
-           // _gameStateManager.StartGame();
         }
 
         private void OnPlayerDeadAction()
         {
             _gameStateManager.GameOver();
             _enemyManagement.StopSpawn();
-            _itemManagement.StopSpawn();
+            //_itemManagement.StopSpawn();
+        }
+
+        public void StartGame()
+        {
+            _gameStateManager.StartGame();
         }
     }
 }

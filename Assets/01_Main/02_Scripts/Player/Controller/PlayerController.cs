@@ -1,3 +1,4 @@
+﻿using HM.Manager;
 using System;
 using UnityEngine;
 
@@ -8,11 +9,17 @@ namespace Player
     {
         [SerializeField] private float _moveSpeed = 10f;
 
+        private GameStateManager _gameStateManager;
         private IInputProvider _inputProvider;
         private Rigidbody2D _rigid;
         
         public Action OnPlayerDead;
         private bool _isDead = false;
+
+        public void Init(GameStateManager gameStateManager)
+        {
+            _gameStateManager = gameStateManager;
+        }
 
         private void Awake()
         {
@@ -30,7 +37,7 @@ namespace Player
 
         private void FixedUpdate()
         {
-            if (_isDead)
+            if (_isDead || (_gameStateManager != null && _gameStateManager.CurrentState != GAME_STATE.PLAYING))
             {
                 return;
             }
