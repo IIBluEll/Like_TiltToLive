@@ -39,7 +39,7 @@ namespace HM.Enemy.Pattern
                 }
             }
 
-            Debug.Log($"선택된 패턴 : {tSelectedPattern.GetType().Name}");
+            //Debug.Log($"선택된 패턴 : {tSelectedPattern.GetType().Name}");
 
             return tSelectedPattern.GetPatternPos(enemyCount , spacing , centerPos);
         }

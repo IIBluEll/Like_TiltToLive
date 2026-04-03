@@ -91,17 +91,6 @@ namespace HM.Enemy.Controller
             }
         }
 
-        private void MoveTowardsTarget(float deltaTime)
-        {
-            if ( _playerTransform == null ) return;
-
-            Vector3 tCurrentPosition = transform.position;
-            Vector3 tTargetPosition = _playerTransform.position;
-            Vector3 tDirection = (tTargetPosition - tCurrentPosition).normalized;
-
-            transform.position += tDirection * ( _moveSpeed * deltaTime );
-        }
-
         public async UniTaskVoid ApplyIceEffect_async(float duration)
         {
             if ( _currentState == ENEMY_STATE.DEAD || _currentState == ENEMY_STATE.SPAWNING || _iceOverlay == null )

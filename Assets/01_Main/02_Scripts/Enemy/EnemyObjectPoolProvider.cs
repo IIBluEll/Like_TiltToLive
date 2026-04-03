@@ -1,4 +1,5 @@
-﻿using HM.CodeBase;
+﻿using Cysharp.Threading.Tasks;
+using HM.CodeBase;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace HM.Enemy.System
     {
         private readonly Dictionary<string, Queue<GameObject>> _dic_Pools = new();
 
-        public void CreatePool(GameObject prefab , int size , Transform parent = null)
+        public async UniTask CreatePool_async(GameObject prefab , int size , Transform parent = null)
         {
             string tKey = prefab.name;
 
@@ -17,20 +18,46 @@ namespace HM.Enemy.System
                 _dic_Pools[ tKey ] = new Queue<GameObject>();
             }
 
+            // 한 프레임에 생성할 객체
+            int tChunkSize = 100;
+
             for ( int i = 0; i < size; i++ )
             {
                 GameObject tObj = Instantiate(prefab, parent);
                 tObj.name = prefab.name;
                 tObj.SetActive(false);
                 _dic_Pools[ tKey ].Enqueue(tObj);
+
+                if ( i > 0 && i % tChunkSize == 0 )
+                {
+                    await UniTask.Yield();
+                }
             }
         }
 
-        public GameObject GetObject(GameObject prefab , Transform parent = null)
+        public void CreatePool(GameObject prefab, int size, Transform parent = null)
         {
             string tKey = prefab.name;
 
-            if ( _dic_Pools.ContainsKey(tKey) && _dic_Pools[ tKey ].Count > 0 )
+            if (!_dic_Pools.ContainsKey(tKey))
+            {
+                _dic_Pools[tKey] = new Queue<GameObject>();
+            }
+
+            for (int i = 0; i < size; i++)
+            {
+                GameObject tObj = Instantiate(prefab, parent);
+                tObj.name = prefab.name;
+                tObj.SetActive(false);
+                _dic_Pools[tKey].Enqueue(tObj);
+            }
+        }
+
+        public GameObject GetObject(GameObject prefab, Transform parent = null)
+        {
+            string tKey = prefab.name;
+
+            if (_dic_Pools.ContainsKey(tKey) && _dic_Pools[tKey].Count > 0)
             {
                 GameObject tObj = _dic_Pools[tKey].Dequeue();
                 tObj.SetActive(true);
@@ -48,12 +75,12 @@ namespace HM.Enemy.System
             obj.SetActive(false);
             string tKey = obj.name;
 
-            if ( !_dic_Pools.ContainsKey(tKey) )
+            if (!_dic_Pools.ContainsKey(tKey))
             {
-                _dic_Pools[ tKey ] = new Queue<GameObject>();
+                _dic_Pools[tKey] = new Queue<GameObject>();
             }
 
-            _dic_Pools[ tKey ].Enqueue(obj);
+            _dic_Pools[tKey].Enqueue(obj);
         }
     }
 }
