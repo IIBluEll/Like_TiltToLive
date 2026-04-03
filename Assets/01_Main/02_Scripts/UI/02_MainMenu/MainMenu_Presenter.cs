@@ -25,6 +25,8 @@ namespace HM.UI.MainMenu
             _view.StartBtn.onClick.AddListener(OnStartActioned);
             _view.SettingBtn.onClick.AddListener(OnSettingActioned);
             _view.ExitBtn.onClick.AddListener(OnExitActioned);
+
+            _view.StartBtn.interactable = true;
         }
 
         public override void Close()

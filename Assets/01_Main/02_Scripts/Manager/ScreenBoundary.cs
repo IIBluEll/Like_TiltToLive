@@ -9,6 +9,8 @@ namespace HM.Manager
         [SerializeField] private float _wallThickness = 1f; // 벽의 두께
         [SerializeField] private Vector2 _margin = new Vector2(0.5f, 0.5f); // 카메라 가장자리에서 안쪽으로 들어올 여백 (x: 가로, y: 세로)
 
+        [SerializeField] private float _innerPadding = 0.5f;
+
         [Header("Visual Settings")]
         [SerializeField] private float _lineWidth = 0.1f;
         [SerializeField] private Color _lineColor = Color.red;
@@ -19,6 +21,9 @@ namespace HM.Manager
         private BoxCollider2D _leftWall;
         private BoxCollider2D _rightWall;
         private LineRenderer _lineRenderer;
+
+        public static Rect PlayableArea { get; private set; }
+        public static Rect KillArea { get; private set; }
 
         private void Awake()
         {
@@ -62,9 +67,6 @@ namespace HM.Manager
             GameObject tWallObj = new GameObject(wallName);
             tWallObj.transform.SetParent(transform); // 관리를 위해 자식으로 넣음
 
-            // 필요에 따라 레이어를 설정할 수 있습니다. 예: "Wall" 레이어
-            // tWallObj.layer = LayerMask.NameToLayer("Wall"); 
-
             BoxCollider2D tCollider = tWallObj.AddComponent<BoxCollider2D>();
 
             return tCollider;
@@ -82,13 +84,36 @@ namespace HM.Manager
             float tAdjustedHeight = tHeight - (_margin.y * 2f);
             float tAdjustedWidth = tWidth - (_margin.x * 2f);
 
+            // 외부에서 사용할 Rect 정보
+            float tHalfWidth = tAdjustedWidth / 2f;
+            float tHalfHeight = tAdjustedHeight / 2f;
+            Vector3 tCamPos = _mainCamera.transform.position;
+
+            // 시각적인 선(halfWidth)에서 패딩(_innerPadding)만큼 더 안쪽으로 들어온 좌표를 구합니다.
+            float tInnerHalfWidth = tHalfWidth - _innerPadding;
+            float tInnerHalfHeight = tHalfHeight - _innerPadding;
+
+            PlayableArea = new Rect(
+                tCamPos.x - tInnerHalfWidth ,
+                tCamPos.y - tInnerHalfHeight ,
+                tInnerHalfWidth * 2f ,
+                tInnerHalfHeight * 2f
+            );
+
+            // PlayableArea를 기준으로 상하좌우 5f (기획에 따라 조절) 확장된 영역을 킬존으로 정의합니다.
+            float tKillMargin = 5f;
+            KillArea = new Rect(
+                PlayableArea.x - tKillMargin ,
+                PlayableArea.y - tKillMargin ,
+                PlayableArea.width + ( tKillMargin * 2f ) ,
+                PlayableArea.height + ( tKillMargin * 2f )
+            );
+
             // 1. 물리 벽 (Collider) 위치/크기 업데이트
             _topWall.size = new Vector2(tAdjustedWidth + _wallThickness * 2, _wallThickness);
             _bottomWall.size = new Vector2(tAdjustedWidth + _wallThickness * 2, _wallThickness);
             _leftWall.size = new Vector2(_wallThickness, tAdjustedHeight + _wallThickness * 2);
             _rightWall.size = new Vector2(_wallThickness, tAdjustedHeight + _wallThickness * 2);
-
-            Vector3 tCamPos = _mainCamera.transform.position;
 
             _topWall.transform.position = new Vector3(tCamPos.x, tCamPos.y + (tAdjustedHeight / 2f) + (_wallThickness / 2f), 0f);
             _bottomWall.transform.position = new Vector3(tCamPos.x, tCamPos.y - (tAdjustedHeight / 2f) - (_wallThickness / 2f), 0f);
@@ -98,14 +123,12 @@ namespace HM.Manager
             // 2. 시각적 선 (LineRenderer) 위치 업데이트
             if (_lineRenderer != null)
             {
-                float halfWidth = tAdjustedWidth / 2f;
-                float halfHeight = tAdjustedHeight / 2f;
 
                 // 4개의 모서리 좌표 계산
-                Vector3 bottomLeft = new Vector3(tCamPos.x - halfWidth, tCamPos.y - halfHeight, 0f);
-                Vector3 topLeft = new Vector3(tCamPos.x - halfWidth, tCamPos.y + halfHeight, 0f);
-                Vector3 topRight = new Vector3(tCamPos.x + halfWidth, tCamPos.y + halfHeight, 0f);
-                Vector3 bottomRight = new Vector3(tCamPos.x + halfWidth, tCamPos.y - halfHeight, 0f);
+                Vector3 bottomLeft = new Vector3(tCamPos.x - tHalfWidth, tCamPos.y - tHalfHeight, 0f);
+                Vector3 topLeft = new Vector3(tCamPos.x - tHalfWidth, tCamPos.y + tHalfHeight, 0f);
+                Vector3 topRight = new Vector3(tCamPos.x + tHalfWidth, tCamPos.y + tHalfHeight, 0f);
+                Vector3 bottomRight = new Vector3(tCamPos.x + tHalfWidth, tCamPos.y - tHalfHeight, 0f);
 
                 _lineRenderer.SetPosition(0, bottomLeft);
                 _lineRenderer.SetPosition(1, topLeft);

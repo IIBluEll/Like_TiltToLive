@@ -1,5 +1,6 @@
 ﻿using HM.CodeBase;
 using HM.Manager;
+using HM.UI.GameOver;
 using HM.UI.InGame;
 using HM.UI.Loading;
 using HM.UI.MainMenu;
@@ -22,6 +23,7 @@ namespace HM.UI
         [SerializeField] private Loading_View _loadingView;
         [SerializeField] private MainMenu_View _mainMenuView;
         [SerializeField] private InGame_View _inGameView;
+        [SerializeField] private GameOver_View _gameOverView;
 
         private Dictionary<UI_STATE,APresenter> _dic_Presenter = new();
         private APresenter _currentPresenter;
@@ -31,6 +33,7 @@ namespace HM.UI
             _dic_Presenter[ UI_STATE.LOADING ] = new Loading_Presenter(rootManager , this, _loadingView);
             _dic_Presenter[ UI_STATE.MAINMENU ] = new MainMenu_Presenter(_mainMenuView , this , rootManager);
             _dic_Presenter[UI_STATE.INGAME] = new InGame_Presenter(_inGameView , this , rootManager);
+            _dic_Presenter[UI_STATE.GAMEOVER] = new GameOver_Presenter(_gameOverView , this , rootManager);
 
             ChangeState(UI_STATE.LOADING );
         }

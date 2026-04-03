@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 1}
+  m_LocalScale: {x: 0.08, y: 0.08, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7594523700100723318}
@@ -100,9 +100,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7594523700100723318}
-  - component: {fileID: 506431092596658046}
   - component: {fileID: 7090795493444799110}
   - component: {fileID: 1098747626862994146}
+  - component: {fileID: 5302673647859023340}
   m_Layer: 0
   m_Name: RedDot 1
   m_TagString: Enemy
@@ -128,22 +128,6 @@ Transform:
   - {fileID: 4822867440163816835}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &506431092596658046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4223499523542585307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46db4e603812c1244be594de5c7c6d1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HM.Enemy.Controller.EnemyController
-  _moveSpeed: 3
-  _spawingAnimationSpeed: 1.2
-  _flashSpeed: 0.3
-  _innerSprite: {fileID: 4950198647325758545}
 --- !u!58 &7090795493444799110
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -179,7 +163,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.23
+  m_Radius: 0.13
 --- !u!50 &1098747626862994146
 Rigidbody2D:
   serializedVersion: 5
@@ -207,6 +191,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &5302673647859023340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4223499523542585307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fac7bbef69755d4f825622c9f41bd18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HM.NewEnemy.EnemyController
+  _spawningAnimationSpeed: 1.2
+  _flashSpeed: 0.5
+  _spriteRender: {fileID: 4950198647325758545}
+  _maxLifespan: 60
 --- !u!1 &7554940967669015594
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +234,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.18, y: 0.18, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7594523700100723318}

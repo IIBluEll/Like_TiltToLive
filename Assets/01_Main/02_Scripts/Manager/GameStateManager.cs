@@ -23,6 +23,7 @@ namespace HM.Manager
         public void StartGame()
         {
             CurrentState = GAME_STATE.PLAYING;
+            Time.timeScale = 1f;
         }
 
         public void PauseGame()

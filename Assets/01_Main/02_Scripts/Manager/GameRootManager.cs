@@ -1,6 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
-using HM.Enemy.System;
-using HM.Item;
+using HM.NewEnemy;
 using HM.UI;
 using Player;
 using System;
@@ -53,7 +52,7 @@ namespace HM.Manager
             // [로딩 20%] 가장 무거운 작업인 적 오브젝트 풀링 시작 및 대기
             Debug.Log("[로딩 20%] 가장 무거운 작업인 적 오브젝트 풀링 시작 및 대기");
             OnLoadingProgressChanged?.Invoke(0.2f);
-            await _enemyManagement.Init(_gameDifficultyManager , _gameStateManager);
+            await _enemyManagement.Init(_gameDifficultyManager, _gameStateManager);
 
             await UniTask.Delay(100);
 
@@ -76,12 +75,34 @@ namespace HM.Manager
         {
             _gameStateManager.GameOver();
             _enemyManagement.StopSpawn();
+
+            _presenterProvider.ChangeState(UI_STATE.GAMEOVER);
             //_itemManagement.StopSpawn();
         }
 
         public void StartGame()
         {
             _gameStateManager.StartGame();
+
+            _enemyManagement.StartSpawn();
+        }
+
+        public void RetryGame()
+        {
+            _gameStateManager.Init();
+            _enemyManagement.ClearAllEnemies();
+            _playerController.ResetPlayer();
+            _gameDifficultyManager.Init(_gameStateManager);
+            _presenterProvider.ChangeState(UI_STATE.INGAME);
+        }
+
+        public void GoToMainMenu()
+        {
+            _gameStateManager.Init();
+            _enemyManagement.ClearAllEnemies();
+            _playerController.ResetPlayer();
+            _gameDifficultyManager.Init(_gameStateManager);
+            _presenterProvider.ChangeState(UI_STATE.MAINMENU);
         }
     }
 }

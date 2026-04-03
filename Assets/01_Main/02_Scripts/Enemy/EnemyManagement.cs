@@ -32,7 +32,6 @@ namespace HM.Enemy.System
             _enemyPatternPool = new EnemyPatternPool();
 
             await EnemyObjectPoolProvider.Instance.CreatePool_async(_enemyPrefab , 2000 , transform);
-            //EnemyObjectPoolProvider.Instance.CreatePool(_enemyPrefab , 1000 , transform);
             StartSpawn();
         }
         

@@ -62,12 +62,12 @@ namespace HM.UI.InGame
             while ( tCurrentCount > 0 )
             {
                 _view.CountDownView.ShowCountDown(tCurrentCount);
-                await UniTask.Delay(1000 , cancellationToken: cancellationToken);
+                await UniTask.Delay(1000 ,ignoreTimeScale:true ,cancellationToken: cancellationToken);
                 tCurrentCount--;
             }
 
             _view.CountDownView.ShowStartMessage();
-            await UniTask.Delay(1000 , cancellationToken: cancellationToken);
+            await UniTask.Delay(1000 , ignoreTimeScale: true , cancellationToken: cancellationToken);
 
             _view.CountDownView.Hide();
             OnGameStartActioned();
