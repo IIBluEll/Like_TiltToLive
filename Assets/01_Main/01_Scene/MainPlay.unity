@@ -3849,6 +3849,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HM.Manager.ScreenBoundary
   _wallThickness: 1
   _margin: {x: 0.5, y: 0.5}
+  _innerPadding: 0.5
   _lineWidth: 0.1
   _lineColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!120 &2003538115
@@ -4005,15 +4006,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e223bb68f046b74483e4b57d66f6758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HM.Manager.GameDifficultyManager
-  _baseEnemySpeed: 1
-  _maxEnemySpeed: 3
-  _baseSpawnInterval: 1500
-  _minSpawnInterval: 1200
+  _baseEnemySpeed: 0.35
+  _maxEnemySpeed: 2
+  _baseSpawnInterval: 5000
+  _minSpawnInterval: 2500
   _timeToMaxDifficulty: 3600
   _basePatternEnemyCount: 5
   _maxPatternEnemyCount: 60
-  _BasePatternSpacing: 5
-  _minPatternSpacing: 2
+  _BasePatternSpacing: 2
+  _minPatternSpacing: 1
 --- !u!114 &2003538119
 MonoBehaviour:
   m_ObjectHideFlags: 0
