@@ -1,6 +1,7 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using HM.NewEnemy;
 using HM.UI;
+using HM.Item;
 using Player;
 using System;
 using UnityEngine;
@@ -59,7 +60,7 @@ namespace HM.Manager
             // [로딩 80%] 아이템 시스템 등 기타 초기화
             Debug.Log("[로딩 80%] 아이템 시스템 등 기타 초기화");
             OnLoadingProgressChanged?.Invoke(0.8f);
-            //_itemManagement.Init(_gameStateManager);
+            //await _itemManagement.Init(_gameStateManager);
 
             await UniTask.Delay(100);
             
@@ -85,12 +86,14 @@ namespace HM.Manager
             _gameStateManager.StartGame();
 
             _enemyManagement.StartSpawn();
+            //_itemManagement.StartSpawn();
         }
 
         public void RetryGame()
         {
             _gameStateManager.Init();
             _enemyManagement.ClearAllEnemies();
+            //_itemManagement.ClearAllItems();
             _playerController.ResetPlayer();
             _gameDifficultyManager.Init(_gameStateManager);
             _presenterProvider.ChangeState(UI_STATE.INGAME);
@@ -100,6 +103,7 @@ namespace HM.Manager
         {
             _gameStateManager.Init();
             _enemyManagement.ClearAllEnemies();
+            //_itemManagement.ClearAllItems();
             _playerController.ResetPlayer();
             _gameDifficultyManager.Init(_gameStateManager);
             _presenterProvider.ChangeState(UI_STATE.MAINMENU);

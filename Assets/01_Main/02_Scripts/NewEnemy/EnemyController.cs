@@ -1,4 +1,4 @@
-﻿using DG.Tweening;
+using DG.Tweening;
 using HM.Manager;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +30,7 @@ namespace HM.NewEnemy
         [Header("Life Settings")]
         [SerializeField] private float _maxLifespan = 60f; // 최대 생존 시간
         private float _lifeTimer;
+        private bool _isFrozen;
 
         private Transform _thisTransform;
         private Transform _playerTransform;
@@ -56,6 +57,7 @@ namespace HM.NewEnemy
             _playerTransform = playerTransform;
             _moveSpeed = moveSpeed;
             IsDead = false;
+            _isFrozen = false;
 
             _thisTransform.DOKill();
             _spriteRender.DOKill();
@@ -119,6 +121,8 @@ namespace HM.NewEnemy
                 return;
             }
 
+            if (_isFrozen) return;
+
             if ( _moveType == MOVE_TYPE.Linear )
             {
                 //주어진 방향으로 직진
@@ -180,6 +184,10 @@ namespace HM.NewEnemy
             _collider.enabled = false;
             IsDead = true;
         }
+
+        public void SetFreezeState(bool isFrozen)
+        {
+            _isFrozen = isFrozen;
+        }
     }
 }
-

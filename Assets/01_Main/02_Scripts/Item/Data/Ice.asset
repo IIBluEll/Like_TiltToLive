@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ece597b5c2da08f4694d5654f1b00f27, type: 3}
+  m_Name: Ice
+  m_EditorClassIdentifier: Assembly-CSharp::HM.Item.Data.ItemData
+  ItemType: 1
+  ItemName: ICE
+  ItemPrefab: {fileID: 2626903847879394391, guid: 86ed827c64e5cbe43a6010991d35bb24, type: 3}
+  AoePrefab: {fileID: 5002408207489311126, guid: eddfe2fc9d457b94e95bea762ae248e7, type: 3}
+  Radius: 2
+  Duration: 0.5
