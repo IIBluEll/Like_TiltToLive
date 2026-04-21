@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4411226803907346616}
   - component: {fileID: 1298049932394491384}
-  - component: {fileID: 2477134002782955515}
+  - component: {fileID: 173644531431502264}
   m_Layer: 0
   m_Name: Explosion Item
   m_TagString: Untagged
@@ -162,7 +162,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.35
---- !u!114 &2477134002782955515
+--- !u!114 &173644531431502264
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -171,10 +171,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4570231538405464891}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 409bf60d0adfb6248aa4224f1166b817, type: 3}
+  m_Script: {fileID: 11500000, guid: d3173384c5bb357498ba13006b929c4f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HM.Item.ItemView
-  _itemData: {fileID: 11400000, guid: 673543a847a102543b9c5f200b96f76a, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::HM.Item.ItemController
+  _itemData: {fileID: 11400000, guid: cfb62e9a2f7808046b07b21ff9864681, type: 2}
+  _bombAreaPrefab: {fileID: 563899491564742325, guid: b1026bb045f80f245b7f87fb1e9334d4, type: 3}
+  _iceAreaPrefab: {fileID: 5002408207489311126, guid: eddfe2fc9d457b94e95bea762ae248e7, type: 3}
 --- !u!1 &6118331949467934680
 GameObject:
   m_ObjectHideFlags: 0

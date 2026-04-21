@@ -1990,6 +1990,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1409866218
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1409866220}
+  - component: {fileID: 1409866219}
+  m_Layer: 0
+  m_Name: ItemSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1409866219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1409866218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5003f20d5ede46419092154f5558b2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HM.Item.ItemManagement
+  _spawnInterval: 1
+  _maxItemOnScreen: 3
+  _bombItem: {fileID: 4570231538405464891, guid: a3b6a3e26ec7871499a7dbf8db93156c, type: 3}
+  _freezeItem: {fileID: 2626903847879394391, guid: 86ed827c64e5cbe43a6010991d35bb24, type: 3}
+  _gameStateManager: {fileID: 2003538119}
+--- !u!4 &1409866220
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1409866218}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.94525, y: 29.684, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1413879380
 GameObject:
   m_ObjectHideFlags: 0
@@ -3828,8 +3877,6 @@ GameObject:
   - component: {fileID: 2003538117}
   - component: {fileID: 2003538119}
   - component: {fileID: 2003538118}
-  - component: {fileID: 2003538120}
-  - component: {fileID: 2003538121}
   m_Layer: 0
   m_Name: GameSystem
   m_TagString: Untagged
@@ -3996,6 +4043,7 @@ MonoBehaviour:
   _presenterProvider: {fileID: 1585144437}
   _enemyManagement: {fileID: 97164190}
   _playerController: {fileID: 1981182938}
+  _itemManagement: {fileID: 1409866219}
 --- !u!114 &2003538118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4029,35 +4077,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19f9111cd5e0741448e60c13b05dd4a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HM.Manager.GameStateManager
---- !u!114 &2003538120
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2003538113}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5003f20d5ede46419092154f5558b2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HM.Item.ItemManagement
-  _availableItems:
-  - {fileID: 11400000, guid: 673543a847a102543b9c5f200b96f76a, type: 2}
-  - {fileID: 11400000, guid: d43bcaebc04ca8241a658da098c0b33e, type: 2}
-  - {fileID: 11400000, guid: 65cc0449782906c49afa921eed628db4, type: 2}
-  _spawnInterval: 10
---- !u!114 &2003538121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2003538113}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72dd5f0223413d844ab675f04088d8d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HM.Item.ItemObjectPoolProvider
 --- !u!1 &2029782573
 GameObject:
   m_ObjectHideFlags: 0
@@ -4180,3 +4199,4 @@ SceneRoots:
   - {fileID: 1585144438}
   - {fileID: 97164188}
   - {fileID: 1981182936}
+  - {fileID: 1409866220}

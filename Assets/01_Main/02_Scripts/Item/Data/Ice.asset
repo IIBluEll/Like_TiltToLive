@@ -12,9 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ece597b5c2da08f4694d5654f1b00f27, type: 3}
   m_Name: Ice
   m_EditorClassIdentifier: Assembly-CSharp::HM.Item.Data.ItemData
-  ItemType: 1
-  ItemName: ICE
-  ItemPrefab: {fileID: 2626903847879394391, guid: 86ed827c64e5cbe43a6010991d35bb24, type: 3}
-  AoePrefab: {fileID: 5002408207489311126, guid: eddfe2fc9d457b94e95bea762ae248e7, type: 3}
-  Radius: 2
-  Duration: 0.5
+  itemType: 1
+  itemIcon: {fileID: -7167651861497909295, guid: 5f9da455c848da94f85c2a50081f8943, type: 3}

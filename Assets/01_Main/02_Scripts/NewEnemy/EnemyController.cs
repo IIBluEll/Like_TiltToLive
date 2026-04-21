@@ -1,6 +1,8 @@
+﻿using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using HM.Manager;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 namespace HM.NewEnemy
@@ -31,6 +33,7 @@ namespace HM.NewEnemy
         [SerializeField] private float _maxLifespan = 60f; // 최대 생존 시간
         private float _lifeTimer;
         private bool _isFrozen;
+        private CancellationTokenSource _freezeCts;
 
         private Transform _thisTransform;
         private Transform _playerTransform;
@@ -167,6 +170,13 @@ namespace HM.NewEnemy
 
         public void Die()
         {
+            if(_freezeCts != null)
+            {
+                _freezeCts.Cancel();
+                _freezeCts.Dispose();
+                _freezeCts = null;
+            }
+
             _thisTransform.DOKill();
             _spriteRender.DOKill();
 
@@ -177,12 +187,49 @@ namespace HM.NewEnemy
 
         private void Despawn()
         {
+            if ( _freezeCts != null )
+            {
+                _freezeCts.Cancel();
+                _freezeCts.Dispose();
+                _freezeCts = null;
+            }
+
             _thisTransform.DOKill();
             _spriteRender.DOKill();
 
             CurrentState = ENEMY_STATE.DEAD;
             _collider.enabled = false;
             IsDead = true;
+        }
+        public void ApplyFreeze(float duration)
+        {
+            if(_freezeCts != null)
+            {
+                _freezeCts.Cancel();
+                _freezeCts.Dispose();
+            }
+
+            _freezeCts = new CancellationTokenSource();
+            FreezeTimer_async(duration , _freezeCts.Token).Forget();
+        }
+
+        private async UniTaskVoid FreezeTimer_async(float duration, CancellationToken token)
+        {
+            var linkedToken = CancellationTokenSource.CreateLinkedTokenSource(token, this.GetCancellationTokenOnDestroy()).Token;
+
+            _isFrozen = true;
+
+            // TODO : 얼어붙은 효과 On
+
+            bool isCancelled = await UniTask.Delay(System.TimeSpan.FromSeconds(duration), cancellationToken: linkedToken).SuppressCancellationThrow();
+
+            if(isCancelled)
+            {
+                return;
+            }
+
+            _isFrozen = false;
+            // TODO : 얼어붙은 효과 Off
         }
 
         public void SetFreezeState(bool isFrozen)

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3803361300958593559}
   - component: {fileID: 6712723111186808772}
   - component: {fileID: -6984030697004767476}
-  - component: {fileID: 7020799686930052268}
+  - component: {fileID: 1687680775037614887}
   m_Layer: 0
   m_Name: Explosion Effect
   m_TagString: Untagged
@@ -86,7 +86,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -98,7 +98,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &7020799686930052268
+--- !u!114 &1687680775037614887
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,9 +107,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 563899491564742325}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9736dad8a89ad1d4d82996739147e247, type: 3}
+  m_Script: {fileID: 11500000, guid: 95469681f7736cc429595786ea493b89, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HM.Item.ItemAoE
+  m_EditorClassIdentifier: Assembly-CSharp::HM.Item.Effect.BombArea
+  _duration: 0.5
 --- !u!1 &6044178507557062213
 GameObject:
   m_ObjectHideFlags: 0
