@@ -1,4 +1,5 @@
-﻿using HM.Manager;
+﻿using Cysharp.Threading.Tasks;
+using HM.Manager;
 using System;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace Player
         
         public Action OnPlayerDead;
         private bool _isDead = false;
+        private bool _isInvincible = false;
 
         public void Init(GameStateManager gameStateManager)
         {
@@ -65,7 +67,13 @@ namespace Player
         public void ResetPlayer()
         {
             _isDead = false;
+            _isInvincible = false;
             transform.position = Vector3.zero;
+        }
+
+        public void SetInvincibleState(bool state)
+        {
+            _isInvincible = state;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -74,9 +82,15 @@ namespace Player
             {
                 return;
             }
-
+           
             if (collision.CompareTag("Enemy"))
             {
+                // 보호막일때
+                if(_isInvincible)
+                {
+                    return;
+                }
+
                 _isDead = true;
                 OnPlayerDead?.Invoke();
             }
