@@ -46,6 +46,8 @@ namespace HM.UI.MainMenu
         {
             _view.StartBtn.interactable = false;
             TransitionToInGame_async().Forget();
+
+            _rootManager.ShowBoundary();
         }
 
         private async UniTaskVoid TransitionToInGame_async()

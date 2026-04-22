@@ -22,6 +22,8 @@ namespace HM.Manager
         [SerializeField] private PlayerController _playerController;
         [SerializeField] private ItemManager _itemManagement;
 
+        [SerializeField] private ScreenBoundary _screenBoundary;
+
         public Action<float> OnLoadingProgressChanged;
 
         private void Start()
@@ -81,12 +83,24 @@ namespace HM.Manager
             _itemManagement.StopSpawn();
         }
 
+        public void ShowBoundary()
+        {
+            _playerController.SpriteRenderOn();
+            _playerController.ResetPlayer();
+            _screenBoundary.ShowBoundary();
+        }
+
         public void StartGame()
         {
             _gameStateManager.StartGame();
 
             _enemyManagement.StartSpawn();
             _itemManagement.StartSpawn();
+
+            if (_playerController != null)
+            {
+                _playerController.CalibrateInput();
+            }
         }
 
         public void RetryGame()
@@ -105,8 +119,10 @@ namespace HM.Manager
             _enemyManagement.ClearAllEnemies();
             _itemManagement.ClearAllItems();
             _playerController.ResetPlayer();
+            _playerController.SpriteRenderOff();
             _gameDifficultyManager.Init(_gameStateManager);
             _presenterProvider.ChangeState(UI_STATE.MAINMENU);
+            _screenBoundary.HideBoundary();
         }
     }
 }

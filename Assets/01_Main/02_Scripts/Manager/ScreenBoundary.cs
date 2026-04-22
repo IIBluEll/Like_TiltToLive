@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 
 namespace HM.Manager
 {
@@ -14,6 +15,9 @@ namespace HM.Manager
         [Header("Visual Settings")]
         [SerializeField] private float _lineWidth = 0.1f;
         [SerializeField] private Color _lineColor = Color.red;
+
+        [Header("BackGround Settings")]
+        [SerializeField] private SpriteRenderer _backgroundImage;
 
         private Camera _mainCamera;
         private BoxCollider2D _topWall;
@@ -33,6 +37,8 @@ namespace HM.Manager
             SetupLineRenderer();
             CreateWalls();
             UpdateBoundaries();
+
+            HideBoundary();
         }
 
         private void SetupLineRenderer()
@@ -72,6 +78,33 @@ namespace HM.Manager
             return tCollider;
         }
 
+        public void ShowBoundary()
+        {
+            _lineRenderer.enabled = true;
+
+            Color tStartColor = _lineColor;
+            tStartColor.a = 0f;
+
+            _lineRenderer.startColor = tStartColor;
+            _lineRenderer.endColor = tStartColor;
+
+            DOTween.To(() => tStartColor.a , x =>
+            {
+                tStartColor.a = x;
+                _lineRenderer.startColor = tStartColor;
+                _lineRenderer.endColor = tStartColor;
+            } , _lineColor.a , 1f).SetEase(Ease.OutCubic);
+        }
+
+        public void HideBoundary()
+        {
+            if ( _lineRenderer != null )
+            {
+                _lineRenderer.DOKill();
+                _lineRenderer.enabled = false;
+            }
+        }
+
         private void UpdateBoundaries()
         {
             if (_mainCamera == null) return;
@@ -88,6 +121,17 @@ namespace HM.Manager
             float tHalfWidth = tAdjustedWidth / 2f;
             float tHalfHeight = tAdjustedHeight / 2f;
             Vector3 tCamPos = _mainCamera.transform.position;
+
+            // 배경 이미지 크기 조절
+            if (_backgroundImage != null && _backgroundImage.sprite != null)
+            {
+                float tSpriteWidth = _backgroundImage.sprite.bounds.size.x;
+                float tSpriteHeight = _backgroundImage.sprite.bounds.size.y;
+
+                // 카메라 사이즈에 맞춰 스케일 조정 (필요에 따라 _margin을 포함한 크기로 맞출 수도 있습니다)
+                _backgroundImage.transform.localScale = new Vector3(tWidth / tSpriteWidth, tHeight / tSpriteHeight, 1f);
+                _backgroundImage.transform.position = new Vector3(tCamPos.x, tCamPos.y, _backgroundImage.transform.position.z);
+            }
 
             // 시각적인 선(halfWidth)에서 패딩(_innerPadding)만큼 더 안쪽으로 들어온 좌표를 구합니다.
             float tInnerHalfWidth = tHalfWidth - _innerPadding;
