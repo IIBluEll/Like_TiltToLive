@@ -11,6 +11,7 @@ namespace HM.UI.InGame
         private const int START_COUNTDOWN  = 5;
 
         private InGame_View _view;
+        private InGame_Model _model;
         private PresenterProvider _presenterProvider;
         private GameRootManager _rootManager;
 
@@ -22,10 +23,14 @@ namespace HM.UI.InGame
             _presenterProvider = _provider;
             _rootManager = rootManager;
 
+            _model = new InGame_Model();
         }
 
         public override void Open()
         {
+            _model.ResetData();
+            _view.UpdateTimer(_model.SurviveTime);
+
             _view.Open();
 
             _cancellToken = new CancellationTokenSource();
@@ -33,7 +38,7 @@ namespace HM.UI.InGame
         }
         public override void Close()
         {
-            if(_cancellToken != null )
+            if ( _cancellToken != null )
             {
                 _cancellToken.Cancel();
                 _cancellToken.Dispose();
@@ -62,7 +67,7 @@ namespace HM.UI.InGame
             while ( tCurrentCount > 0 )
             {
                 _view.CountDownView.ShowCountDown(tCurrentCount);
-                await UniTask.Delay(1000 ,ignoreTimeScale:true ,cancellationToken: cancellationToken);
+                await UniTask.Delay(1000 , ignoreTimeScale: true , cancellationToken: cancellationToken);
                 tCurrentCount--;
             }
 
@@ -71,12 +76,26 @@ namespace HM.UI.InGame
 
             _view.CountDownView.Hide();
             OnGameStartActioned();
+
+            StartGameTimer_async(cancellationToken).Forget();
         }
 
         private void OnGameStartActioned()
         {
             _rootManager.StartGame();
         }
+
+        private async UniTaskVoid StartGameTimer_async(CancellationToken token)
+        {
+            while ( !token.IsCancellationRequested )
+            {
+                await UniTask.Yield(PlayerLoopTiming.Update , token);
+
+                _model.AddTime(Time.deltaTime);
+                _view.UpdateTimer(_model.SurviveTime);
+            }
+        }
+
     }
 }
 

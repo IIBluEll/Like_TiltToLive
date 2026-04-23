@@ -1,16 +1,20 @@
 using UnityEngine;
 
-public class InGame_Model : MonoBehaviour
+namespace HM.UI.InGame
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class InGame_Model
     {
-        
-    }
+        public float SurviveTime { get; private set; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void ResetData()
+        {
+            SurviveTime = 0f;
+        }
+
+        public void AddTime(float deltaTime)
+        {
+            SurviveTime += deltaTime;
+        }
     }
 }
+
