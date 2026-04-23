@@ -13,7 +13,8 @@ namespace Player
         private GameStateManager _gameStateManager;
         private IInputProvider _inputProvider;
         private Rigidbody2D _rigid;
-        
+        private SpriteRenderer _spriteRender;
+
         public Action OnPlayerDead;
         private bool _isDead = false;
         private bool _isInvincible = false;
@@ -30,8 +31,11 @@ namespace Player
             _rigid.freezeRotation = true;
             _rigid.bodyType = RigidbodyType2D.Kinematic;
 
+            _spriteRender = GetComponent<SpriteRenderer>();
+            _spriteRender.enabled = false;
+
 #if UNITY_ANDROID && !UNITY_EDITOR
-            _inputProvider = gameObject.AddComponent<GyroInput>();            
+            _inputProvider = gameObject.AddComponent<GyroInput>();   
 #else
             _inputProvider = gameObject.AddComponent<MouseInput>();
 #endif
@@ -64,11 +68,29 @@ namespace Player
             _rigid.MovePosition(tNextPos);
         }
 
+        public void SpriteRenderOn()
+        {
+            _spriteRender.enabled = true;
+        }
+
+        public void SpriteRenderOff()
+        {
+            _spriteRender.enabled = false;
+        }
+
         public void ResetPlayer()
         {
             _isDead = false;
             _isInvincible = false;
             transform.position = Vector3.zero;
+        }
+
+        public void CalibrateInput()
+        {
+            if (_inputProvider != null)
+            {
+                _inputProvider.Calibrate();
+            }
         }
 
         public void SetInvincibleState(bool state)
