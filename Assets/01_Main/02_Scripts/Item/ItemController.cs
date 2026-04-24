@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace HM.Item
 {
+    /// <summary>
+    /// 개별 아이템 객체의 충돌 판정과 획득 시 이펙트 발생(폭발, 빙결 등)을 처리하는 컨트롤러
+    /// </summary>
     public class ItemController : MonoBehaviour
     {
         [Header("Item Settings")]

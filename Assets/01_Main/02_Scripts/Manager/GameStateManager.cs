@@ -10,6 +10,9 @@ namespace HM.Manager
         GAMEOVER,
     }
 
+    /// <summary>
+    /// 게임의 전반적인 상태(PLAYING, GAMEOVER 등)를 관리하고, 상태 변경에 따른 이벤트를 브로드캐스팅하는 매니저
+    /// </summary>
     public class GameStateManager : MonoBehaviour
     {
         public GAME_STATE CurrentState { get; private set; }

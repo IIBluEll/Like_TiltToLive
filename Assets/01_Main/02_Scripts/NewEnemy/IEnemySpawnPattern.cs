@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace HM.NewEnemy
 {
+    /// <summary>
+    /// 개방-폐쇄 원칙(OCP)을 준수하여, 기존 코드 수정 없이 다양한 적 스폰 형태(원형, 라인형 등)를 확장하기 위한 전략(Strategy) 인터페이스
+    /// </summary>
     public interface IEnemySpawnPattern
     {
         void CalculatePosition(int count , Vector3 center , float spacing , List<Vector3> results);

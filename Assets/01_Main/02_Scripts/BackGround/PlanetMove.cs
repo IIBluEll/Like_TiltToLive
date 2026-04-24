@@ -1,6 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
+/// <summary>
+/// 배경 행성 오브젝트가 화면 아래로 떨어지도록 이동시키고 화면을 벗어나면 풀로 반환하는 로직
+/// </summary>
 public class PlanetMove : MonoBehaviour
 {
     private float _moveSpeed;

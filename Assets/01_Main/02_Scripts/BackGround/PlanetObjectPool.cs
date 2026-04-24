@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 배경을 장식하는 행성 오브젝트들의 생성과 재사용을 관리하는 풀(Pool) 클래스
+/// </summary>
 public class PlanetObjectPool : MonoBehaviour
 {
     [SerializeField] private GameObject[] _planetPrefab;

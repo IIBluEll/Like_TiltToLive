@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace HM.NewEnemy
 {
+    /// <summary>
+    /// 최대 2000개의 객체 풀링과 O(1) Swap-back 삭제 연산을 통해 가비지(GC) 발생을 원천 차단하는 대규모 적 군집 제어 클래스
+    /// </summary>
     public class EnemyManagement : MonoBehaviour
     {
         [SerializeField] private GameObject _enemyPrefab;

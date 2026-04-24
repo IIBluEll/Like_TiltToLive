@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace HM.UI.MainMenu
 {
+    /// <summary>
+    /// 메인 메뉴 화면의 상태와 로직을 관리하며 게임 시작 등의 이벤트를 루트 매니저로 전달하는 프레젠터
+    /// </summary>
     public class MainMenu_Presenter : APresenter
     {
         private MainMenu_View _view;

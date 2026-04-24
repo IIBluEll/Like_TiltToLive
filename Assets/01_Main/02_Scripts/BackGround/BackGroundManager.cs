@@ -1,6 +1,9 @@
 ﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// 일정 주기마다 다양한 크기와 속도의 배경 행성 오브젝트를 스폰하여 우주 공간의 깊이감을 연출하는 매니저
+/// </summary>
 public class BackGroundManager : MonoBehaviour
 {
     [Header("Managers")]

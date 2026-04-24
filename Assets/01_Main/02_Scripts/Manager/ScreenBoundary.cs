@@ -4,6 +4,9 @@ using UnityEngine;
 namespace HM.Manager
 {
     [RequireComponent(typeof(LineRenderer))]
+    /// <summary>
+    /// 게임 내 플레이어의 이동 가능 영역과 적 객체들이 소멸되는 외곽 경계(Kill Area)를 정의하고 시각화하는 클래스
+    /// </summary>
     public class ScreenBoundary : MonoBehaviour
     {
         [Header("Boundary Settings")]

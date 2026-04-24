@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace HM.UI.InGame
 {
+    /// <summary>
+    /// 게임 시작 전 카운트다운 연출을 담당하는 서브 뷰
+    /// </summary>
     public class CountDown_View : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _countDownText;

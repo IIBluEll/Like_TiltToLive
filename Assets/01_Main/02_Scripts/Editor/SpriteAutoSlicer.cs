@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
+/// <summary>
+/// 에디터 환경에서 텍스처를 자동으로 슬라이스(분할)해주는 유틸리티 스크립트
+/// </summary>
 public class SpriteAutoSlicer
 {
     // 유니티 상단 메뉴에 버튼을 생성합니다.

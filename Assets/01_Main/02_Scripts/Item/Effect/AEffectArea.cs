@@ -7,6 +7,9 @@ using UnityEngine;
 namespace HM.Item.Effect
 {
     [RequireComponent(typeof(CircleCollider2D))]
+    /// <summary>
+    /// 아이템 효과(폭발, 빙결 등)가 발동되는 영역의 생명주기와 기본 애니메이션을 관리하는 추상 클래스
+    /// </summary>
     public abstract class AEffectArea : MonoBehaviour
     {
         [Header("Area Settings")]

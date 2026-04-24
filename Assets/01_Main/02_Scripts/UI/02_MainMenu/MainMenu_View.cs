@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace HM.UI.MainMenu
 {
+    /// <summary>
+    /// 메인 메뉴 화면의 버튼 등 UI 요소를 제어하고 사용자 입력을 프레젠터로 전달하는 뷰
+    /// </summary>
     public class MainMenu_View : AView
     {
         [Header("UI")]

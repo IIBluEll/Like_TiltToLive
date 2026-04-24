@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace HM.NewEnemy
 {
+    /// <summary>
+    /// 대규모 적 객체의 빠른 생성과 반환을 위해 UniTask 비동기 초기화를 지원하는 적 전용 싱글톤 객체 풀
+    /// </summary>
     public class EnemyObjectPoolProvider : ASingletone<EnemyObjectPoolProvider>
     {
         private readonly Dictionary<string, Queue<GameObject>> _dic_Pools = new();
