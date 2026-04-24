@@ -2606,7 +2606,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1533433398
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2915,7 +2915,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 228}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1738181234
@@ -3901,6 +3901,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerController
   _moveSpeed: 10
+  _rotationSpeed: 15
 --- !u!58 &1981182939
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3936,7 +3937,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1.985
+  m_Radius: 0.4
 --- !u!50 &1981182940
 Rigidbody2D:
   serializedVersion: 5
@@ -4184,6 +4185,7 @@ MonoBehaviour:
   _gameStateManager: {fileID: 2003538119}
   _gameDifficultyManager: {fileID: 2003538118}
   _presenterProvider: {fileID: 1585144437}
+  _backGroundManager: {fileID: 1397987522}
   _enemyManagement: {fileID: 97164190}
   _playerController: {fileID: 1981182938}
   _itemManagement: {fileID: 1409866219}

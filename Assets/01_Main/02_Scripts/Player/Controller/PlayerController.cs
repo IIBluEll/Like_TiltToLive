@@ -5,10 +5,14 @@ using UnityEngine;
 
 namespace Player
 {
+    /// <summary>
+    /// 사용자 입력(마우스/자이로)을 받아 구면 선형 보간(Slerp)으로 부드러운 이동과 회전을 처리하고, 생존 판별을 담당하는 컨트롤러
+    /// </summary>
     [RequireComponent(typeof(Rigidbody2D), typeof(CircleCollider2D))]
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private float _moveSpeed = 10f;
+        [SerializeField] private float _rotationSpeed = 15f;
 
         private GameStateManager _gameStateManager;
         private IInputProvider _inputProvider;
@@ -59,13 +63,23 @@ namespace Player
 
         private void MoveToTarget(Vector2 currentPos, Vector2 targetPos)
         {
-            // 기존에 잘 작동하던 부드러운 Lerp 이동 로직을 그대로 사용합니다.
             Vector2 tNextPos = Vector2.Lerp(currentPos, targetPos, _moveSpeed * Time.fixedDeltaTime);
             
             tNextPos.x = Mathf.Clamp(tNextPos.x , ScreenBoundary.PlayableArea.xMin , ScreenBoundary.PlayableArea.xMax);
             tNextPos.y = Mathf.Clamp(tNextPos.y , ScreenBoundary.PlayableArea.yMin , ScreenBoundary.PlayableArea.yMax);
 
             _rigid.MovePosition(tNextPos);
+
+            // 방향 회전
+            Vector2 tDir = targetPos - currentPos;
+
+            if(tDir.sqrMagnitude > 0.03f)
+            {
+                float tTargetAngle = MathF.Atan2(tDir.y,tDir.x) * Mathf.Rad2Deg - 90f;
+
+                Quaternion tTargetRotation = Quaternion.Euler(0f, 0f, tTargetAngle);
+                transform.rotation = Quaternion.Slerp(transform.rotation, tTargetRotation, _rotationSpeed * Time.fixedDeltaTime);
+            }
         }
 
         public void SpriteRenderOn()

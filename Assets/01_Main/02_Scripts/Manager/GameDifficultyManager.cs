@@ -2,6 +2,9 @@
 
 namespace HM.Manager
 {
+    /// <summary>
+    /// 시간에 따른 적 스폰 주기, 이동 속도 및 패턴 규모를 선형 보간(Lerp)으로 계산하여 게임 난이도의 점진적 상승을 제어하는 매니저
+    /// </summary>
     public class GameDifficultyManager : MonoBehaviour
     {
         [Header("Difficulty Settings")]

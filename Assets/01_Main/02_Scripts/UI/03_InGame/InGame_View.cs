@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace HM.UI.InGame
 {
+    /// <summary>
+    /// 인게임 중 실시간으로 생존 시간(타이머) 등의 정보를 화면에 표시하는 뷰
+    /// </summary>
     public class InGame_View : AView
     {
         [Header("UI")]

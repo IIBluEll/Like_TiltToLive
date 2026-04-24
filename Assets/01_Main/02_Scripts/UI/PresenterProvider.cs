@@ -17,6 +17,9 @@ namespace HM.UI
         GAMEOVER
     }
 
+    /// <summary>
+    /// UI의 각 상태(State)와 Presenter를 매핑(Dictionary)하여, 뷰의 전환과 생명주기를 엄격하게 관리하는 UI 상태 머신 및 팩토리
+    /// </summary>
     public class PresenterProvider : MonoBehaviour
     {
         [Header("View")]

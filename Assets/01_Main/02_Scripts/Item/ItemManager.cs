@@ -7,6 +7,9 @@ using Random = UnityEngine.Random;
 
 namespace HM.Item
 {
+    /// <summary>
+    /// 인게임 중 주기적으로 아이템을 스폰하고 모든 아이템 객체의 생명주기를 관리하는 매니저
+    /// </summary>
     public class ItemManager : MonoBehaviour
     {
         [Header("Spawn Setting")]

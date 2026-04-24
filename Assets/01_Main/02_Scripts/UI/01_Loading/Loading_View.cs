@@ -3,6 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 초기 로딩 화면의 진행률 바 및 연출을 담당하는 뷰
+/// </summary>
 public class Loading_View : AView
 {
     [SerializeField] private Slider _loadingSlider;

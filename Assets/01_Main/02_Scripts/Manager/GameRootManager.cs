@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace HM.Manager
 {
+    /// <summary>
+    /// 게임의 전체 생명주기 및 초기화(비동기 로딩) 과정을 총괄하고, 각 서브 매니저들의 의존성을 주입하는 최상위 루트 매니저
+    /// </summary>
     public class GameRootManager : MonoBehaviour
     {
         [Header("Managers")]
@@ -18,6 +21,7 @@ namespace HM.Manager
         [SerializeField] private PresenterProvider _presenterProvider;
 
         [Space(5f), Header("Logic")]
+        [SerializeField] private BackGroundManager _backGroundManager;
         [SerializeField] private EnemyManagement _enemyManagement;
         [SerializeField] private PlayerController _playerController;
         [SerializeField] private ItemManager _itemManagement;
@@ -37,9 +41,11 @@ namespace HM.Manager
         {
             await UniTask.Delay(1000);
 
+
             // [로딩 0%] 기본 매니저 동기 초기화
             Debug.Log("[로딩 0%] 기본 매니저 동기 초기화");
             OnLoadingProgressChanged?.Invoke(0f);
+            _backGroundManager.Init();
             _gameStateManager.Init();
             _gameDifficultyManager.Init(_gameStateManager);
 
@@ -96,7 +102,7 @@ namespace HM.Manager
 
             _enemyManagement.StartSpawn();
             _itemManagement.StartSpawn();
-
+            _backGroundManager.StopSpawning();
             if (_playerController != null)
             {
                 _playerController.CalibrateInput();
@@ -123,6 +129,7 @@ namespace HM.Manager
             _gameDifficultyManager.Init(_gameStateManager);
             _presenterProvider.ChangeState(UI_STATE.MAINMENU);
             _screenBoundary.HideBoundary();
+            _backGroundManager.StartSpawning();
         }
     }
 }

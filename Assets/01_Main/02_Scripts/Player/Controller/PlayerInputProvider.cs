@@ -33,6 +33,9 @@ namespace Player
         }
     }
 
+    /// <summary>
+    /// 모바일 환경에서 디바이스 자이로스코프(가속도계) 센서값을 목표 지점으로 변환하여 제공하는 입력 프로바이더
+    /// </summary>
     public class GyroInput : MonoBehaviour, IInputProvider
     {
         private Vector3 _baselineOffset;

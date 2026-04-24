@@ -20,6 +20,9 @@ namespace HM.NewEnemy
         Linear
     }
 
+    /// <summary>
+    /// 개별 적의 생명주기와 플레이어 추적 이동(Swarm)을 담당하며, Tick 기반 업데이트로 Mono 오버헤드를 최소화한 컨트롤러
+    /// </summary>
     public class EnemyController : MonoBehaviour
     {
         [Header("Animation Setting")]

@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace HM.UI.InGame
 {
+    /// <summary>
+    /// 인게임 데이터(Model)와 화면(View)을 중재하며, UniTask 기반의 비동기 타이머를 통해 메인 게임 루프 UI를 제어하는 프레젠터
+    /// </summary>
     public class InGame_Presenter : APresenter
     {
         private const int START_COUNTDOWN  = 5;
